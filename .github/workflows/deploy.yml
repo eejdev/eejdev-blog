@@ -4,7 +4,7 @@ name: Deploy Astro to GitHub Pages
 on:
   push:
     branches:
-      - main  # or 'master' if that’s your branch
+      - master # or 'master' if that’s your branch
 
 permissions:
   contents: read
