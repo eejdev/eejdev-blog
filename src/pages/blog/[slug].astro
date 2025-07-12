@@ -1,0 +1,30 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+import BlogLayout from '../../layouts/blog.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map(post => ({ params: { slug: post.slug } }));
+}
+
+const { slug } = Astro.params;
+const post = await getEntry('blog', slug);
+if (!post) throw new Error(`Post not found: ${slug}`);
+
+const { Content } = await post.render();
+
+const relatedPosts = (await getCollection('blog'))
+  .filter(p => p.slug !== slug)
+  .sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime())
+  .slice(0, 5);
+---
+
+<BlogLayout title={post.data.title} relatedPosts={relatedPosts}>
+  <h1>{post.data.title}</h1>
+  <p class="text-sm text-base-content/60 mb-6">
+    Published on {new Date(post.data.pubDate).toDateString()}
+  </p>
+
+  <Content />
+</BlogLayout>
+

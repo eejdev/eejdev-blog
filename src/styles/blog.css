@@ -1,0 +1,11 @@
+---
+const { title = "Blog" } = Astro.props;
+import BaseLayout from './base.astro';
+---
+
+<BaseLayout title={title}>
+  <article class="prose prose-invert max-w-3xl mx-auto">
+    <slot />
+  </article>
+</BaseLayout>
+

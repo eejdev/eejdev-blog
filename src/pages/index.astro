@@ -1,11 +1,83 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import BaseLayout from '../layouts/base.astro';
+import { getCollection } from 'astro:content';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const posts = await getCollection('blog');
+const sortedPosts = posts
+  .filter(p => p.data.draft !== true)
+  .sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime())
+  .slice(0, 3); // show 3 latest
+
+const title = `
+ ███████╗███████╗      ██╗ 
+██╔════╝██╔════╝      ██║
+█████╗  █████╗        ██║
+██╔══╝  ██╔══╝        ██║
+███████╗███████╗ ███████║
+╚══════╝╚══════╝ ╚══════╝
+              eejdev-blog
+`;
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+<BaseLayout title="Echoes from the Pale">
+  <section class="text-center py-12">
+    <pre class="glitch-word mb-6">{title}</pre>
+    <p class="text-base-content/70 font-mono max-w-xl mx-auto leading-relaxed">
+      This is a quiet corner of the web — a <span class="glitch-word">journal</span>, a <span class="glitch-word">memory palace</span>,
+      a <span class="glitch-word">machine log</span> scribbled over with static. I’m a machine learning scientist, wandering further into the deep, trying to understand more than just models — trying to understand meaning.  
+      <br /><br />
+      I miss the old web. Or maybe I miss the <span class="glitch-word">*</span>idea<span class="glitch-word">*</span> of it — 
+      raw, fragmented, unpolished. Before growth hacking, before engagement.
+      This site is not optimized for virality. It is not a personal brand. It is not a product.
+      <br /><br />
+      Here, I collect <span class="glitch-word">generative hallucinations</span>, half-finished ideas about AI, quiet photographs,
+      and the occasional <span class="glitch-word--red">fever</span> <span class="glitch-word">dream</span>.
+      You are welcome to read, to linger, or to disappear.
+    </p>
+  </section>
+
+  <section class="max-w-4xl mx-auto px-4 py-8">
+    <h2 class="text-2xl font-bold mb-4 text-secondary">Recent Entries</h2>
+    <ul class="space-y-6">
+      {sortedPosts.map(post => (
+        <li>
+          <a href={`/blog/${post.slug}/`} class="block hover:opacity-90 group">
+            <h3 class="text-xl font-bold text-primary group-hover:underline">{post.data.title}</h3>
+            <p class="text-sm text-base-content/60 font-mono">
+              {post.data.description ?? "A record without commentary."}
+            </p>
+            <p class="text-xs text-base-content/40 font-mono mt-1">
+              {new Date(post.data.pubDate).toDateString()}
+            </p>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="max-w-4xl mx-auto px-4 py-12 flex flex-col md:flex-row gap-6 text-center">
+<a href="/blog" class="bg-base-200 hover:bg-base-300 p-6 rounded-xl flex-1 transition">
+  <h3 class="text-lg font-bold text-primary mb-2">Blog</h3>
+  <p class="text-base-content/60 font-mono">
+    Notes, experiments, reflections, and slow thinking.
+  </p>
+</a>
+
+<a href="/gallery" class="bg-base-200 hover:bg-base-300 p-6 rounded-xl flex-1 transition">
+  <h3 class="text-lg font-bold text-primary mb-2">Photos</h3>
+  <p class="text-base-content/60 font-mono">
+    Captures of abandoned corners, flickers of quiet — where entropy meets light.
+  </p>
+</a>
+
+<a href="/about" class="bg-base-200 hover:bg-base-300 p-6 rounded-xl flex-1 transition">
+  <h3 class="text-lg font-bold text-primary mb-2">About</h3>
+  <p class="text-base-content/60 font-mono">
+    I build with algorithms. I build with intention.
+  </p>
+</a>
+
+  </section>
+</BaseLayout>
+
+

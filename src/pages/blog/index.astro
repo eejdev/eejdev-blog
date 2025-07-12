@@ -1,0 +1,27 @@
+---
+import { getCollection } from 'astro:content';
+import BlogLayout from '../../layouts/blog.astro';
+
+const posts = await getCollection('blog');
+---
+
+<BlogLayout title="The Journal">
+  <h1>The Journal</h1>
+  <p class="text-base-content/70 font-mono mb-6">
+    These are echoes pulled from the Pale — recent writings and scattered thoughts.
+  </p>
+
+  <ul class="space-y-6">
+    {posts
+      .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+      .map(post => (
+        <li>
+          <a href={`/blog/${post.slug}/`} class="block hover:opacity-90">
+            <h2 class="text-xl text-primary font-bold">{post.data.title}</h2>
+            <p class="text-base-content/60 font-mono text-sm">{post.data.description}</p>
+          </a>
+        </li>
+      ))}
+  </ul>
+</BlogLayout>
+

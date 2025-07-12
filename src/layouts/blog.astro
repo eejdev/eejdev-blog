@@ -1,0 +1,37 @@
+---
+const { title = 'Blog', relatedPosts = [] } = Astro.props;
+import BaseLayout from './base.astro';
+---
+
+<BaseLayout title={title}>
+  <article class="prose prose-invert max-w-3xl mx-auto mb-12">
+    <slot />
+  </article>
+
+  {relatedPosts.length > 0 && (
+<footer class="max-w-3xl mx-auto mt-10 border-t border-base-content/20 pt-8 pb-12 text-sm text-base-content/60 font-mono">
+  <h3 class="text-base-content/50 tracking-wide uppercase text-xs mb-3">More Writings</h3>
+  <ul class="space-y-1 mb-6">
+    {relatedPosts.map(post => (
+      <li>
+        <a href={`/blog/${post.slug}`} class="text-primary hover:underline hover:text-primary/80 transition-all duration-200">
+          <span class="glitch-word">{post.data.title}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+
+  <hr class="my-4 border-base-content/10" />
+
+  <ul class="flex flex-wrap gap-4 text-xs tracking-widest uppercase">
+    <li><a href="/" class="hover:underline hover:text-primary/70">Home</a></li>
+    <li><a href="/about" class="hover:underline hover:text-primary/70">About</a></li>
+    <li><a href="/cv" class="hover:underline hover:text-primary/70">CV</a></li>
+    <li><a href="/galleries" class="hover:underline hover:text-primary/70">Photography</a></li>
+  </ul>
+</footer>
+
+  )}
+</BaseLayout>
+
+

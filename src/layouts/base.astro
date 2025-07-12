@@ -1,0 +1,37 @@
+---
+import "../styles/global.css";
+const { title = "Untitled" } = Astro.props;
+---
+
+<html lang="en" data-theme="discolysium">
+  <head>
+    <meta charset="UTF-8" />
+    <title>{title}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body class="bg-base-100 text-base-content min-h-screen flex flex-col">
+    <main class="flex-1 p-4">
+      <slot />
+    </main>
+    <footer class="p-4 text-sm text-center text-base-content/70">
+      <p>© {new Date().getFullYear()} — eejdev</p>
+    </footer>
+
+    <!-- Glitch Randomizer Script -->
+    <script is:inline>
+      document.addEventListener('DOMContentLoaded', () => {
+        const glitchWords = document.querySelectorAll('.glitch-word');
+        glitchWords.forEach(word => {
+          const flickerDelay = (Math.random() * 60 + 10).toFixed(2) + 's';  // 10–70s
+          const corruptDelay = (Math.random() * 80 + 20).toFixed(2) + 's';  // 20–100s
+          const flickerDuration = (Math.random() * 3 + 2).toFixed(2) + 's'; // 2–5s
+          const corruptDuration = (Math.random() * 4 + 3).toFixed(2) + 's'; // 3–7s
+
+          word.style.animationDelay = `${flickerDelay}, ${corruptDelay}`;
+          word.style.animationDuration = `${flickerDuration}, ${corruptDuration}`;
+        });
+      });
+    </script>
+  </body>
+</html>
+
