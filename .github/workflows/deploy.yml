@@ -1,11 +1,10 @@
-# .github/workflows/deploy.yml
-
 name: Deploy Astro site to GitHub Pages
 
 on:
   push:
     branches: [main]
-
+  workflow_dispatch:
+  
 permissions:
   contents: read
   pages: write
@@ -19,17 +18,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Install, build, and upload site
+        uses: withastro/action@v4
         with:
-          node-version: 20
-          cache: "npm"
-
-      - run: npm ci
-      - run: npm run build
-
-      - uses: actions/upload-pages-artifact@v2
+          # optional: path: .
+          # optional: node-version: 20
+          # optional: package-manager: npm
 
   deploy:
     needs: build
@@ -37,8 +34,8 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-
     steps:
-      - uses: actions/deploy-pages@v2
+      - name: Deploy to GitHub Pages
         id: deployment
+        uses: actions/deploy-pages@v4
 
