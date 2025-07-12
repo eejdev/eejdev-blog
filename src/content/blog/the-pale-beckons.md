@@ -16,6 +16,6 @@ There is no comment section. Not because dialogue is unwelcome — but because n
 
 This site is a static artifact. It loads quickly. It forgets you. It doesn't count your visit. And when you leave, it won’t try to bring you back.
 
-That’s the point.
+That’s the point. <span class="terminal-cursor"></span>
 
 

@@ -47,5 +47,5 @@ Make it weird. Make it yours.
 Make it so when you press that first key, it feels like a door sliding open in the dark.
 
 The terminal doesn’t want to help you.  
-It wants you to **wake up**.
+It wants you to **wake up**. <span class="terminal-cursor"></span>
 
