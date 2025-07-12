@@ -1,11 +1,10 @@
 import { defineConfig } from 'astro/config';
-import tailwind from '@astrojs/tailwind';
-
-const isProd = process.env.NODE_ENV === 'production';
+import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-  site: isProd ? 'https://eejdev.github.io' : undefined,
+  site: 'https://eejdev.github.io',
   output: 'static',
-  integrations: [tailwind()],
+  vite: {
+    plugins: [tailwindcss()],
+  },
 });
-

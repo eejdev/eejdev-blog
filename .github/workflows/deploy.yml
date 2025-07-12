@@ -1,46 +1,28 @@
 name: Deploy to GitHub Pages
-
 on:
   push:
     branches: [main]
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          node-version: 20
-
-      - name: Install Dependencies
-        run: npm ci
-
-      - name: Build
-        run: npm run build
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v2
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: https://eejdev.github.io
-    steps:
-      - name: Deploy to GitHub Pages
+          node-version: '18'
+      - run: npm ci
+      - run: npm run build
+      - run: touch dist/.nojekyll
+      - name: Deploy
+        id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          publish_dir: ./dist
 
