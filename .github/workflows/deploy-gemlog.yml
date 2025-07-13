@@ -1,0 +1,40 @@
+name: Deploy Gemini to Flounder
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/content/blog/**"
+      - "src/pages/about/**"
+      - "src/pages/index.astro"
+      - "gem_log.py"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.x
+
+      - name: Install dependencies
+        run: pip install markdown frontmatter beautifulsoup4
+
+      - name: Convert Astro content to .gmi
+        run: python gem_log.py
+
+      - name: Deploy to Flounder
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.FLOUNDER_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_flounder
+          chmod 600 ~/.ssh/id_flounder
+          echo -e "Host flounder.online\n  User eejdev\n  IdentityFile ~/.ssh/id_flounder\n  StrictHostKeyChecking no" >> ~/.ssh/config
+          scp -r gemlog/* eejdev@flounder.online:public_gemini/
+
